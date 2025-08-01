@@ -1,0 +1,5 @@
+MEDICAL BILL
+Date: 2024-01-15
+Patient: John Doe
+Diagnosis: Back pain
+Cost: .00

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Test - Pathways AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .upload-section {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .upload-section:hover {
+            border-color: #007bff;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 OCR Test - Pathways AI</h1>
+        <p style="text-align: center; color: #666;">
+            Test the new OpenAI-based OCR parsing functionality
+        </p>
+
+        <div class="upload-section">
+            <h3>📄 Upload Medical Document</h3>
+            <p>Upload a PDF, image, or text file to test the OCR parsing</p>
+            <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg,.txt" />
+            <br>
+            <button onclick="uploadFile()" id="uploadBtn">🚀 Upload & Process</button>
+            <button onclick="testExtraction()" id="testBtn">🧪 Test Extraction</button>
+        </div>
+
+        <div id="status"></div>
+        <div id="results" class="results" style="display: none;"></div>
+    </div>
+
+    <script>
+        const BACKEND_URL = 'http://localhost:8000';
+
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+
+        function showResults(data) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            if (!fileInput.files[0]) {
+                showStatus('Please select a file first', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            uploadBtn.disabled = true;
+            showStatus('🔄 Uploading and processing file...', 'info');
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/google-ocr/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                showStatus('✅ File processed successfully!', 'success');
+                showResults(result);
+                
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+                console.error('Error:', error);
+            } finally {
+                uploadBtn.disabled = false;
+            }
+        }
+
+        async function testExtraction() {
+            const testBtn = document.getElementById('testBtn');
+            testBtn.disabled = true;
+            showStatus('🧪 Testing OpenAI extraction with sample data...', 'info');
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/google-ocr/test-extraction`, {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                showStatus('✅ Test extraction completed!', 'success');
+                showResults(result);
+                
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+                console.error('Error:', error);
+            } finally {
+                testBtn.disabled = false;
+            }
+        }
+
+        // Check backend connectivity on page load
+        window.onload = async function() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/`);
+                if (response.ok) {
+                    showStatus('✅ Backend is running and accessible', 'success');
+                } else {
+                    showStatus('⚠️ Backend responded but with an error', 'error');
+                }
+            } catch (error) {
+                showStatus('❌ Cannot connect to backend. Make sure it\'s running on port 8000', 'error');
+            }
+        };
+    </script>
+</body>
+</html> 

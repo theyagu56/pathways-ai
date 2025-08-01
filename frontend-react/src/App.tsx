@@ -9,6 +9,8 @@ import Documents from './pages/Documents';
 import Settings from './pages/Settings';
 import PatientIntakeForm from './components/PatientIntakeForm';
 import ErrorBoundary from './components/ErrorBoundary';
+import MedicalChronology from './pages/MedicalChronology';
+import MedicalChronology1 from './pages/MedicalChronology1';
 
 interface LogEntry {
   id: string;
@@ -57,6 +59,8 @@ function App() {
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/documents" element={<Documents />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/medical-chronology" element={<MedicalChronology />} />
+            <Route path="/medical-chronology1" element={<MedicalChronology1 />} />
           </Routes>
         </Layout>
       </Router>

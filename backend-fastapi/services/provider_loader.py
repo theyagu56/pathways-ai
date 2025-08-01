@@ -18,7 +18,9 @@ def get_providers() -> List[Dict]:
         "../shared-data/providers.json",
         "./shared-data/providers.json",
         "/Users/thiyagarajankamalakannan/Projects/pathways-ai/shared-data/providers.json",
-        "../../shared-data/providers.json"
+        "../../shared-data/providers.json",
+        "./providers.json",  # Current directory
+        "providers.json"     # Current directory (relative)
     ]
     for path in possible_paths:
         if os.path.exists(path):

@@ -74,6 +74,20 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
       icon: '⚙️',
       path: '/settings',
       description: 'Application settings'
+    },
+    /*{
+      id: 'medical-chronology',
+      name: 'Medical Chronology',
+      icon: '📜',
+      path: '/medical-chronology',
+      description: 'View medical chronology'
+    },*/
+    {
+      id: 'medical-chronology1',
+      name: 'Medical Chronology',
+      icon: '🔍',
+      path: '/medical-chronology1',
+      description: 'Medical chronology with Google Vision API'
     }
   ];
 

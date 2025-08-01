@@ -14,11 +14,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy app code
 COPY . .
 
-# Copy shared data (will be mounted in compose)
-COPY ../shared-data /app/shared-data
+# Copy Google Cloud credentials if they exist (optional)
+# Note: You need to manually copy google-credentials.json to this directory before building
+# or use a multi-stage build if you want to include credentials
 
-# Copy .env.production as .env
-COPY .env.production .env
+# Create logs directory and set permissions
+RUN mkdir -p /app/logs && chown -R appuser:appuser /app
 
 USER appuser
 EXPOSE 8000
