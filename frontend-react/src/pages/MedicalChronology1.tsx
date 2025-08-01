@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import MedicalTimeline from '../components/MedicalTimeline';
 
 interface VisitDetail {
   date?: string;
@@ -139,12 +140,62 @@ const MedicalChronology1: React.FC = () => {
     }).format(amount);
   };
 
+  // Convert visit data to MedicalTimeline format
+  const convertToTimelineEvents = (visits: VisitDetail[], filename: string = 'Uploaded Document') => {
+    return visits.map((visit, index) => ({
+      date: visit.date || new Date().toISOString().split('T')[0],
+      type: visit.diagnosis ? 'Diagnosis' : visit.imaging ? 'Imaging' : visit.cost ? 'Billing' : 'Visit',
+      description: visit.notes || visit.diagnosis || visit.imaging || 'Medical visit',
+      source: filename,
+      amount: visit.cost
+    }));
+  };
+
+  // Demo data for testing the timeline component
+  const demoEvents = [
+    {
+      date: '2024-12-15',
+      type: 'Visit',
+      description: 'Annual physical examination with Dr. Smith',
+      source: 'Medical Records.pdf',
+      amount: 150
+    },
+    {
+      date: '2024-11-28',
+      type: 'Diagnosis',
+      description: 'Diagnosed with seasonal allergies',
+      source: 'Allergy Test Results.pdf',
+      amount: 75
+    },
+    {
+      date: '2024-11-15',
+      type: 'Imaging',
+      description: 'Chest X-ray for respiratory symptoms',
+      source: 'Radiology Report.pdf',
+      amount: 200
+    },
+    {
+      date: '2024-10-20',
+      type: 'Procedure',
+      description: 'Blood work and lab tests',
+      source: 'Lab Results.pdf',
+      amount: 120
+    },
+    {
+      date: '2024-09-05',
+      type: 'Billing',
+      description: 'Emergency room visit for minor injury',
+      source: 'ER Bill.pdf',
+      amount: 450
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
-            Medical Chronology 1 (Google Vision API)
+            Medical Chronology
           </h1>
           
           {/* File Upload Section */}
@@ -192,47 +243,12 @@ const MedicalChronology1: React.FC = () => {
                 </button>
               </div>
 
-              {/* Visit Timeline */}
+              {/* Medical Timeline */}
               <div className="bg-white border rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Visit Timeline (Reverse Chronological)</h3>
-                {result.timeline.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diagnosis</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imaging</th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {result.timeline.map((visit, index) => (
-                          <tr key={index} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {formatDate(visit.date || '')}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
-                              {visit.diagnosis || 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {visit.cost ? formatCurrency(visit.cost) : 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
-                              {visit.imaging || 'N/A'}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
-                              {visit.notes || 'N/A'}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <p className="text-gray-500">No visits found in the document.</p>
-                )}
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Medical Timeline</h3>
+                <MedicalTimeline 
+                  events={convertToTimelineEvents(result.timeline, file?.name || 'Uploaded Document')}
+                />
               </div>
 
               {/* Monthly Billing Summary */}
@@ -324,6 +340,17 @@ const MedicalChronology1: React.FC = () => {
                   </ul>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Demo Timeline Section (when no results) */}
+          {!result && (
+            <div className="space-y-8">
+              <div className="bg-white border rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Demo Medical Timeline</h3>
+                <p className="text-gray-600 mb-4">This is a preview of how your medical timeline will look after uploading documents.</p>
+                <MedicalTimeline events={demoEvents} />
+              </div>
             </div>
           )}
         </div>
