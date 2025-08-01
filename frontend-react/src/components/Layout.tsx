@@ -34,7 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
     
     {
       id: 'patient-intake',
-      name: 'Policy & Members',
+      name: 'In-take',
       icon: '👤',
       path: '/patient-intake',
       description: 'Patient information and intake form'
@@ -42,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
     
     {
       id: 'voice-intake',
-      name: 'Triage & Referral',
+      name: 'Case Notes',
       icon: '🎤',
       path: '/voice-intake',
       description: 'Voice-enabled healthcare triage'

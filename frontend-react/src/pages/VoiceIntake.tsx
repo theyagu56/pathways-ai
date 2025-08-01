@@ -221,7 +221,7 @@ const VoiceIntake: React.FC<VoiceIntakeProps> = ({ addLog }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Voice-Enabled Healthcare Intake</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center"></h1>
       
       {/* Input Mode Selection */}
       <div className="mb-6">
@@ -234,7 +234,7 @@ const VoiceIntake: React.FC<VoiceIntakeProps> = ({ addLog }) => {
                 : "bg-gray-200 text-gray-700"
             }`}
           >
-            🎤 Voice Recording
+            🎤 Voice Memo
           </button>
           <button
             onClick={() => setInputMode("file")}
@@ -244,7 +244,7 @@ const VoiceIntake: React.FC<VoiceIntakeProps> = ({ addLog }) => {
                 : "bg-gray-200 text-gray-700"
             }`}
           >
-            📁 Upload Audio
+            📁 File Upload
           </button>
           <button
             onClick={() => setInputMode("text")}
@@ -254,7 +254,7 @@ const VoiceIntake: React.FC<VoiceIntakeProps> = ({ addLog }) => {
                 : "bg-gray-200 text-gray-700"
             }`}
           >
-            ✏️ Text Input
+            ✏️ Notes
           </button>
         </div>
       </div>

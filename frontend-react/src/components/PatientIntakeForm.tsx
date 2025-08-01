@@ -150,11 +150,11 @@ export const PatientIntakeForm: React.FC<PatientIntakeFormProps> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm p-6">
-        <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
+        <h2 className="text-xl font-semibold mb-4">Patient Information</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Family Member</label>
+            <label className="block text-sm font-medium mb-1">Patient Name</label>
             <select
               className="w-full p-2 border rounded"
               value={selectedMember}
