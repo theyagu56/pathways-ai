@@ -227,126 +227,220 @@ const MedicalChronology1: React.FC = () => {
   };
 
   const showSampleData = () => {
-    // Create sample fallback data
-    const sampleData: OCRExtractionResult = {
-      visits: [
-        {
-          date: '2024-12-15',
-          diagnosis: 'Annual physical examination',
-          cost: 150,
-          imaging: 'None',
-          notes: 'Patient in good health, recommended follow-up in 1 year'
-        },
-        {
-          date: '2024-11-28',
-          diagnosis: 'Seasonal allergies',
-          cost: 75,
-          imaging: 'None',
-          notes: 'Prescribed antihistamine medication'
-        },
-        {
-          date: '2024-11-15',
-          diagnosis: 'Respiratory symptoms',
-          cost: 200,
-          imaging: 'Chest X-ray',
-          notes: 'X-ray showed clear lung fields, no abnormalities detected'
-        }
-      ],
-      timeline: [
-        {
-          date: '2024-12-15',
-          diagnosis: 'Annual physical examination',
-          cost: 150,
-          imaging: 'None',
-          notes: 'Patient in good health, recommended follow-up in 1 year'
-        },
-        {
-          date: '2024-11-28',
-          diagnosis: 'Seasonal allergies',
-          cost: 75,
-          imaging: 'None',
-          notes: 'Prescribed antihistamine medication'
-        },
-        {
-          date: '2024-11-15',
-          diagnosis: 'Respiratory symptoms',
-          cost: 200,
-          imaging: 'Chest X-ray',
-          notes: 'X-ray showed clear lung fields, no abnormalities detected'
-        },
-        {
-          date: '2024-10-20',
-          diagnosis: 'Blood work and lab tests',
-          cost: 120,
-          imaging: 'None',
-          notes: 'All results within normal range'
-        },
-        {
-          date: '2024-09-05',
-          diagnosis: 'Emergency room visit',
-          cost: 450,
-          imaging: 'None',
-          notes: 'Minor injury treated, patient discharged in stable condition'
-        }
-      ],
-      monthly_summary: [
-        {
-          year: 2024,
-          month: 12,
-          total_cost: 150,
-          record_count: 1
-        },
-        {
-          year: 2024,
-          month: 11,
-          total_cost: 275,
-          record_count: 2
-        },
-        {
-          year: 2024,
-          month: 10,
-          total_cost: 120,
-          record_count: 1
-        },
-        {
-          year: 2024,
-          month: 9,
-          total_cost: 450,
-          record_count: 1
-        }
-      ],
-      errors: []
+    // Set mock patient information
+    setSelectedPatient('John Doe');
+    setPatientName('John Doe');
+    setCurrentPatientId('PAT_SAMPLE123');
+    
+    // Create comprehensive sample data with multiple documents
+    const sampleResults = {
+      'Medical_Records_2024.pdf': {
+        visits: [
+          {
+            date: '2024-12-15',
+            diagnosis: 'S13.0',
+            cost: 150,
+            imaging: 'None',
+            notes: 'Annual physical examination - Patient in good health, recommended follow-up in 1 year'
+          },
+          {
+            date: '2024-11-28',
+            diagnosis: 'J30.9',
+            cost: 75,
+            imaging: 'None',
+            notes: 'Seasonal allergies - Prescribed antihistamine medication'
+          }
+        ],
+        timeline: [
+          {
+            date: '2024-12-15',
+            diagnosis: 'S13.0',
+            cost: 150,
+            imaging: 'None',
+            notes: 'Annual physical examination - Patient in good health, recommended follow-up in 1 year'
+          },
+          {
+            date: '2024-11-28',
+            diagnosis: 'J30.9',
+            cost: 75,
+            imaging: 'None',
+            notes: 'Seasonal allergies - Prescribed antihistamine medication'
+          }
+        ],
+        monthly_summary: [
+          {
+            year: 2024,
+            month: 12,
+            total_cost: 150,
+            record_count: 1
+          },
+          {
+            year: 2024,
+            month: 11,
+            total_cost: 75,
+            record_count: 1
+          }
+        ],
+        errors: []
+      },
+      'Lab_Results_2024.pdf': {
+        visits: [
+          {
+            date: '2024-11-15',
+            diagnosis: 'R07.9',
+            cost: 200,
+            imaging: 'Chest X-ray',
+            notes: 'Respiratory symptoms - X-ray showed clear lung fields, no abnormalities detected'
+          },
+          {
+            date: '2024-10-20',
+            diagnosis: 'Z51.11',
+            cost: 120,
+            imaging: 'None',
+            notes: 'Blood work and lab tests - All results within normal range'
+          }
+        ],
+        timeline: [
+          {
+            date: '2024-11-15',
+            diagnosis: 'R07.9',
+            cost: 200,
+            imaging: 'Chest X-ray',
+            notes: 'Respiratory symptoms - X-ray showed clear lung fields, no abnormalities detected'
+          },
+          {
+            date: '2024-10-20',
+            diagnosis: 'Z51.11',
+            cost: 120,
+            imaging: 'None',
+            notes: 'Blood work and lab tests - All results within normal range'
+          }
+        ],
+        monthly_summary: [
+          {
+            year: 2024,
+            month: 11,
+            total_cost: 200,
+            record_count: 1
+          },
+          {
+            year: 2024,
+            month: 10,
+            total_cost: 120,
+            record_count: 1
+          }
+        ],
+        errors: []
+      },
+      'Emergency_Visit_2024.pdf': {
+        visits: [
+          {
+            date: '2024-09-05',
+            diagnosis: 'S06.0',
+            cost: 450,
+            imaging: 'CT Scan',
+            notes: 'Emergency room visit - Minor head injury treated, patient discharged in stable condition'
+          }
+        ],
+        timeline: [
+          {
+            date: '2024-09-05',
+            diagnosis: 'S06.0',
+            cost: 450,
+            imaging: 'CT Scan',
+            notes: 'Emergency room visit - Minor head injury treated, patient discharged in stable condition'
+          }
+        ],
+        monthly_summary: [
+          {
+            year: 2024,
+            month: 9,
+            total_cost: 450,
+            record_count: 1
+          }
+        ],
+        errors: []
+      }
     };
 
-    const sampleRawText = `Sample Medical Document OCR Text
+    const sampleRawTexts = {
+      'Medical_Records_2024.pdf': `Sample Medical Records OCR Text
 
 PATIENT: John Doe
 DOB: 01/15/1980
 MRN: 123456789
+PATIENT ID: PAT_SAMPLE123
 
 MEDICAL HISTORY:
 - Annual physical examination completed on 12/15/2024
-- Patient reported feeling generally well
-- Blood pressure: 120/80 mmHg
-- Heart rate: 72 bpm
-- Temperature: 98.6°F
+- Diagnosis: S13.0 - Annual physical examination
+- Cost: $150.00
+- Notes: Patient in good health, recommended follow-up in 1 year
 
-DIAGNOSIS:
-- No significant health issues identified
-- Recommended maintaining current exercise routine
-- Follow-up scheduled for next year
+- Seasonal allergies diagnosed on 11/28/2024
+- Diagnosis: J30.9 - Seasonal allergies
+- Cost: $75.00
+- Notes: Prescribed antihistamine medication
 
-BILLING:
-- Office visit: $150.00
-- Insurance coverage applied
-- Patient responsibility: $25.00
+TREATMENT PLAN:
+- Continue current medications
+- Schedule follow-up appointment in 6 months
+- Monitor allergy symptoms`,
+      
+      'Lab_Results_2024.pdf': `Sample Lab Results OCR Text
 
-This is a sample OCR text that would be extracted from a medical document using Google Cloud Vision API or fallback to mock service when the API is not available.`;
+PATIENT: John Doe
+DOB: 01/15/1980
+MRN: 123456789
+PATIENT ID: PAT_SAMPLE123
 
-    // Store sample data
-    setResults(prev => ({ ...prev, 'sample-data': sampleData }));
-    setRawTexts(prev => ({ ...prev, 'sample-data': sampleRawText }));
-    setDownloadIds(prev => ({ ...prev, 'sample-data': 999 })); // Sample download ID
+LABORATORY RESULTS:
+- Date: 11/15/2024
+- Diagnosis: R07.9 - Respiratory symptoms
+- Imaging: Chest X-ray performed
+- Cost: $200.00
+- Results: Clear lung fields, no abnormalities detected
+
+- Date: 10/20/2024
+- Diagnosis: Z51.11 - Blood work and lab tests
+- Cost: $120.00
+- Results: All values within normal range
+
+LAB VALUES:
+- CBC: Normal
+- Chemistry Panel: Normal
+- Lipid Panel: Normal`,
+      
+      'Emergency_Visit_2024.pdf': `Sample Emergency Visit OCR Text
+
+PATIENT: John Doe
+DOB: 01/15/1980
+MRN: 123456789
+PATIENT ID: PAT_SAMPLE123
+
+EMERGENCY DEPARTMENT VISIT:
+- Date: 09/05/2024
+- Diagnosis: S06.0 - Minor head injury
+- Imaging: CT Scan performed
+- Cost: $450.00
+- Treatment: Minor injury treated, patient discharged in stable condition
+
+ASSESSMENT:
+- Patient presented with minor head injury
+- CT scan showed no intracranial bleeding
+- Patient was alert and oriented
+- Discharged with instructions for home care`
+    };
+
+    // Set the sample data
+    setResults(sampleResults);
+    setRawTexts(sampleRawTexts);
+    setShowRawText(true);
+    
+    console.log('📊 Sample data loaded successfully');
+    console.log('👤 Patient: John Doe (PAT_SAMPLE123)');
+    console.log('📁 Documents: 3 files loaded');
+    console.log('💰 Total Cost: $995.00');
   };
 
   const loadPatients = async () => {
@@ -422,6 +516,227 @@ This is a sample OCR text that would be extracted from a medical document using 
       style: 'currency',
       currency: 'USD',
     }).format(amount);
+  };
+
+  const downloadTimelinePDF = () => {
+    // Create a new window for PDF generation
+    const printWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+    if (!printWindow) {
+      alert('Please allow popups to download the PDF');
+      return;
+    }
+
+    const currentPatientName = selectedPatient || patientName || 'Unknown Patient';
+    const patientId = currentPatientId || 'N/A';
+    const totalDocuments = Object.keys(results).length;
+    const totalVisits = Object.values(results).reduce((total, result) => total + (result.timeline?.length || 0), 0);
+    const totalCost = Object.values(results).reduce((total, result) => {
+      const visitCosts = result.timeline?.map(visit => visit.cost || 0) || [];
+      return total + visitCosts.reduce((sum, cost) => sum + cost, 0);
+    }, 0);
+
+    // Get all timeline events
+    const allEvents = Object.entries(results).flatMap(([fileName, result]) => 
+      convertToTimelineEvents(result.timeline, fileName)
+    ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Medical Timeline - ${currentPatientName}</title>
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: white;
+            color: #333;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3B82F6;
+            padding-bottom: 20px;
+          }
+          .header h1 {
+            color: #1F2937;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+          }
+          .patient-info {
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+          }
+          .patient-info h2 {
+            color: #1E40AF;
+            margin: 0 0 15px 0;
+            font-size: 20px;
+          }
+          .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+          }
+          .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #DBEAFE;
+          }
+          .info-label {
+            font-weight: 600;
+            color: #374151;
+          }
+          .info-value {
+            color: #1F2937;
+          }
+          .timeline-section {
+            margin-bottom: 30px;
+          }
+          .timeline-section h2 {
+            color: #1F2937;
+            border-bottom: 2px solid #3B82F6;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+          }
+          .timeline-item {
+            background: #F8FAFC;
+            border-left: 4px solid #3B82F6;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+          }
+          .timeline-date {
+            color: #3B82F6;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+          }
+          .timeline-type {
+            color: #059669;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+          }
+          .timeline-description {
+            color: #374151;
+            margin-bottom: 5px;
+          }
+          .timeline-source {
+            color: #6B7280;
+            font-size: 12px;
+            font-style: italic;
+          }
+          .timeline-amount {
+            color: #DC2626;
+            font-weight: 600;
+            font-size: 14px;
+          }
+          .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #6B7280;
+            font-size: 12px;
+            border-top: 1px solid #E5E7EB;
+            padding-top: 20px;
+          }
+          .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 1000;
+          }
+          .print-button:hover {
+            background: #2563EB;
+          }
+          @media print {
+            body { margin: 0; }
+            .header { page-break-after: avoid; }
+            .patient-info { page-break-after: avoid; }
+            .timeline-item { page-break-inside: avoid; }
+            .print-button { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
+        
+        <div class="header">
+          <h1>Medical Timeline Report</h1>
+          <p>Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+        </div>
+
+        <div class="patient-info">
+          <h2>Patient Information</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Patient Name:</span>
+              <span class="info-value">${currentPatientName}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Patient ID:</span>
+              <span class="info-value">${patientId}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total Documents:</span>
+              <span class="info-value">${totalDocuments}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total Visits:</span>
+              <span class="info-value">${totalVisits}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total Cost:</span>
+              <span class="info-value">${formatCurrency(totalCost)}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date Range:</span>
+              <span class="info-value">${allEvents.length > 0 ? `${allEvents[0].date} to ${allEvents[allEvents.length - 1].date}` : 'N/A'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-section">
+          <h2>Combined Medical Timeline</h2>
+          ${allEvents.map(event => `
+            <div class="timeline-item">
+              <div class="timeline-date">${formatDate(event.date)}</div>
+              <div class="timeline-type">${event.type}</div>
+              <div class="timeline-description">${event.description}</div>
+              <div class="timeline-source">Source: ${event.source}</div>
+              ${event.amount ? `<div class="timeline-amount">Cost: ${formatCurrency(event.amount)}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="footer">
+          <p>This report was generated by the Medical Chronology System</p>
+          <p>Patient confidentiality and privacy are maintained in accordance with HIPAA guidelines</p>
+        </div>
+
+        <script>
+          // Auto-print after a short delay to ensure content is loaded
+          setTimeout(() => {
+            window.print();
+          }, 500);
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
   };
 
   // Convert visit data to MedicalTimeline format
@@ -878,7 +1193,18 @@ This is a sample OCR text that would be extracted from a medical document using 
 
               {/* Combined Medical Timeline */}
               <div className="bg-white border rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Combined Medical Timeline</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold text-gray-900">Combined Medical Timeline</h3>
+                  <button
+                    onClick={downloadTimelinePDF}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm flex items-center space-x-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Download PDF</span>
+                  </button>
+                </div>
                 <MedicalTimeline 
                   events={Object.entries(results).flatMap(([fileName, result]) => 
                     convertToTimelineEvents(result.timeline, fileName)

@@ -34,7 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
     
     {
       id: 'patient-intake',
-      name: 'In-take',
+      name: 'Intake',
       icon: '👤',
       path: '/patient-intake',
       description: 'Patient information and intake form'
