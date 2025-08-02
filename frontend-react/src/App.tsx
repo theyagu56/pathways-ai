@@ -11,6 +11,7 @@ import PatientIntakeForm from './components/PatientIntakeForm';
 import ErrorBoundary from './components/ErrorBoundary';
 import MedicalChronology from './pages/MedicalChronology';
 import MedicalChronology1 from './pages/MedicalChronology1';
+import PatientInformation from './pages/PatientInformation';
 
 interface LogEntry {
   id: string;
@@ -61,6 +62,7 @@ function App() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/medical-chronology" element={<MedicalChronology />} />
             <Route path="/medical-chronology1" element={<MedicalChronology1 />} />
+            <Route path="/patient-information" element={<PatientInformation />} />
           </Routes>
         </Layout>
       </Router>

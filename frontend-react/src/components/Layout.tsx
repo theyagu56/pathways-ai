@@ -41,6 +41,14 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
     },
     
     {
+      id: 'patient-information',
+      name: 'Patient Information',
+      icon: '📋',
+      path: '/patient-information',
+      description: 'Upload and manage patient medical documents'
+    },
+    
+    {
       id: 'voice-intake',
       name: 'Case Notes',
       icon: '🎤',

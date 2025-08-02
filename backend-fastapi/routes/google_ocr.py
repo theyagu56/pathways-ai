@@ -2,6 +2,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Form
 from fastapi.responses import FileResponse
 import logging
 from services.google_ocr_service import google_ocr_service
+from services.patient_service import patient_service
 from app.schemas.ocr import OCRExtractionResult
 import tempfile
 import os
@@ -28,6 +29,11 @@ async def upload_document(
         
         # Create patient folder and save file
         patient_folder = save_patient_file(patient_name, file.filename, file_bytes)
+        
+        # Create or get patient from database
+        safe_patient_name = "".join(c for c in patient_name if c.isalnum() or c in (' ', '-', '_')).rstrip()
+        safe_patient_name = safe_patient_name.replace(' ', '_')
+        patient = patient_service.create_patient(name=patient_name, folder_name=safe_patient_name)
         
         # Extract text using Google Cloud Vision
         text = google_ocr_service.extract_text(file_bytes, file.content_type)
@@ -61,6 +67,7 @@ async def upload_document(
         response = OCRExtractionResult(**result)
         response_dict = response.dict()
         response_dict["patient_name"] = patient_name
+        response_dict["patient_id"] = patient.patient_id
         response_dict["file_path"] = str(patient_folder)
         
         logger.info(f"Successfully processed document for {patient_name}. Found {len(result['visits'])} visits")
@@ -176,21 +183,8 @@ async def get_patient_files(patient_name: str):
 async def list_patients():
     """Get list of all patients with uploaded files"""
     try:
-        uploads_dir = Path("uploads")
-        
-        if not uploads_dir.exists():
-            return {"patients": []}
-        
-        patients = []
-        for patient_folder in uploads_dir.iterdir():
-            if patient_folder.is_dir():
-                file_count = len([f for f in patient_folder.iterdir() if f.is_file()])
-                patients.append({
-                    "name": patient_folder.name.replace('_', ' '),
-                    "folder_name": patient_folder.name,
-                    "file_count": file_count,
-                    "folder_path": str(patient_folder)
-                })
+        # Get patients from database
+        patients = patient_service.get_all_patients()
         
         return {"patients": patients}
         

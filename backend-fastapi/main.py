@@ -55,6 +55,7 @@ from routes.match_providers import router as match_providers_router
 from routes.insurances import router as insurances_router
 from routes.specialties import router as specialties_router
 from routes.google_ocr import router as google_ocr_router
+from routes.medical_processing import router as medical_processing_router
 
 # OCR router disabled - using Google OCR only
 ocr_available = False
@@ -88,6 +89,7 @@ app.add_middleware(
 app.include_router(match_providers_router)
 app.include_router(insurances_router)
 app.include_router(specialties_router)
+app.include_router(medical_processing_router)
 if voice_available:
     app.include_router(voice_router)
 if ocr_available:
