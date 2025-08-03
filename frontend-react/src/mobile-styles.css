@@ -1,0 +1,80 @@
+/* Mobile-specific styles for better mobile experience */
+
+/* Ensure proper touch targets */
+button, input, select, textarea {
+  min-height: 44px; /* iOS recommended minimum */
+}
+
+/* Improve file input on mobile */
+input[type="file"] {
+  font-size: 16px; /* Prevent zoom on iOS */
+}
+
+/* Better spacing for mobile */
+@media (max-width: 640px) {
+  .mobile-padding {
+    padding: 1rem;
+  }
+  
+  .mobile-margin {
+    margin: 0.5rem;
+  }
+  
+  /* Stack buttons vertically on mobile */
+  .mobile-stack {
+    flex-direction: column;
+  }
+  
+  /* Full width buttons on mobile */
+  .mobile-full-width {
+    width: 100%;
+  }
+  
+  /* Smaller text on mobile */
+  .mobile-text-sm {
+    font-size: 0.875rem;
+  }
+  
+  /* Better touch targets */
+  .mobile-touch-target {
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Prevent horizontal scrolling */
+body {
+  overflow-x: hidden;
+}
+
+/* Better mobile navigation */
+@media (max-width: 640px) {
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    z-index: 50;
+  }
+}
+
+/* Improve mobile forms */
+@media (max-width: 640px) {
+  input, select, textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .mobile-form-group {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Better mobile modals */
+@media (max-width: 640px) {
+  .mobile-modal {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+} 

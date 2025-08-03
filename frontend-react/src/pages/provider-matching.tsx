@@ -65,13 +65,13 @@ const ProviderMatching: React.FC<ProviderMatchingProps> = ({ addLog }) => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Provider Matching</h1>
-      <form className="space-y-4" onSubmit={handleSubmit}>
+    <div className="max-w-xl mx-auto p-3 sm:p-4">
+      <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Provider Matching</h1>
+      <form className="space-y-3 sm:space-y-4" onSubmit={handleSubmit}>
         <div>
-          <label className="block font-medium">Injury Description</label>
+          <label className="block font-medium text-sm sm:text-base">Injury Description</label>
           <textarea
-            className="w-full border rounded p-2"
+            className="w-full border rounded p-2 text-sm sm:text-base"
             value={injuryDescription}
             onChange={e => setInjuryDescription(e.target.value)}
             rows={3}
@@ -79,9 +79,9 @@ const ProviderMatching: React.FC<ProviderMatchingProps> = ({ addLog }) => {
           />
         </div>
         <div>
-          <label className="block font-medium">Zip Code</label>
+          <label className="block font-medium text-sm sm:text-base">Zip Code</label>
           <input
-            className="w-full border rounded p-2"
+            className="w-full border rounded p-2 text-sm sm:text-base"
             type="text"
             value={zipCode}
             onChange={e => setZipCode(e.target.value)}
@@ -89,9 +89,9 @@ const ProviderMatching: React.FC<ProviderMatchingProps> = ({ addLog }) => {
           />
         </div>
         <div>
-          <label className="block font-medium">Insurance</label>
+          <label className="block font-medium text-sm sm:text-base">Insurance</label>
           <select
-            className="w-full border rounded p-2"
+            className="w-full border rounded p-2 text-sm sm:text-base"
             value={insurance}
             onChange={e => setInsurance(e.target.value)}
             required
@@ -104,23 +104,23 @@ const ProviderMatching: React.FC<ProviderMatchingProps> = ({ addLog }) => {
         </div>
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="w-full bg-blue-600 text-white px-4 py-2 rounded text-sm sm:text-base"
           disabled={loading}
         >
           {loading ? "Matching..." : "Find Providers"}
         </button>
       </form>
-      {error && <div className="text-red-600 mt-4">{error}</div>}
-      {loading && <div className="mt-4">Loading...</div>}
+      {error && <div className="text-red-600 mt-3 sm:mt-4 text-sm sm:text-base">{error}</div>}
+      {loading && <div className="mt-3 sm:mt-4 text-sm sm:text-base">Loading...</div>}
       {results.length > 0 && (
-        <div className="mt-6 space-y-4">
+        <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
           {results.map((provider, idx) => (
-            <div key={idx} className="border rounded p-4 shadow">
-              <div className="font-bold text-lg">{provider.name}</div>
-              <div>Specialty: {provider.specialty}</div>
-              <div>Distance: {provider.distance} miles</div>
-              <div>Availability: {provider.availability}</div>
-              <div className="text-sm text-gray-600">Reason: {provider.ranking_reason}</div>
+            <div key={idx} className="border rounded p-3 sm:p-4 shadow">
+              <div className="font-bold text-base sm:text-lg">{provider.name}</div>
+              <div className="text-sm sm:text-base">Specialty: {provider.specialty}</div>
+              <div className="text-sm sm:text-base">Distance: {provider.distance} miles</div>
+              <div className="text-sm sm:text-base">Availability: {provider.availability}</div>
+              <div className="text-xs sm:text-sm text-gray-600">Reason: {provider.ranking_reason}</div>
             </div>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MedicalTimeline from '../components/MedicalTimeline';
+import { getApiUrl } from '../config';
 
 interface VisitDetail {
   date?: string;
@@ -130,7 +131,7 @@ const MedicalChronology1: React.FC = () => {
         console.log(`📤 Uploading file: ${fileName}`);
         setUploadProgress(prev => ({ ...prev, [fileName]: 25 }));
         
-        const response = await fetch('http://localhost:8000/google-ocr/upload', {
+        const response = await fetch(getApiUrl('/google-ocr/upload'), {
           method: 'POST',
           body: formData,
         });
@@ -182,7 +183,7 @@ const MedicalChronology1: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/google-ocr/download/${downloadId}`);
+              const response = await fetch(getApiUrl(`/google-ocr/download/${downloadId}`));
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
@@ -205,7 +206,7 @@ const MedicalChronology1: React.FC = () => {
   const testExtraction = async () => {
     setIsUploading(true);
     try {
-      const response = await fetch('http://localhost:8000/google-ocr/test-extraction', {
+      const response = await fetch(getApiUrl('/google-ocr/test-extraction'), {
         method: 'POST',
       });
 
@@ -446,7 +447,7 @@ ASSESSMENT:
   const loadPatients = async () => {
     console.log('👥 Loading patients...');
     try {
-      const response = await fetch('http://localhost:8000/google-ocr/patients');
+      const response = await fetch(getApiUrl('/google-ocr/patients'));
       console.log('📊 Patients response status:', response.status);
       if (response.ok) {
         const data = await response.json();
@@ -462,7 +463,7 @@ ASSESSMENT:
 
   const loadPatientFiles = async (patientName: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/google-ocr/patient-files/${encodeURIComponent(patientName)}`);
+      const response = await fetch(getApiUrl(`/google-ocr/patient-files/${encodeURIComponent(patientName)}`));
       if (response.ok) {
         const data = await response.json();
         console.log(`Files for ${patientName}:`, data);
@@ -516,6 +517,11 @@ ASSESSMENT:
       style: 'currency',
       currency: 'USD',
     }).format(amount);
+  };
+
+  const handleServisAiSync = () => {
+    // TODO: Implement Servis.ai integration
+    alert('Servis.ai sync functionality coming soon! This will automatically sync medical data from Servis.ai platform.');
   };
 
   const downloadTimelinePDF = () => {
@@ -790,31 +796,31 @@ ASSESSMENT:
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">
             Medical Chronology
           </h1>
           
-          {/* Two Column Layout for Search and Upload */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Mobile-first layout - single column on mobile, two columns on desktop */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
             {/* Patient Search Section */}
             <div className="bg-blue-50 rounded-lg overflow-hidden">
             {/* Header - Always visible */}
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">Patient Search</h2>
+            <div className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Patient Search</h2>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">
+                  <span className="text-xs sm:text-sm text-gray-600">
                     {patients.length > 0 ? `${patients.length} patient(s) found` : 'No patients loaded'}
                   </span>
                 </div>
               </div>
             
             {/* Always Visible Content */}
-            <div className="space-y-4">
-                <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {/* Autocomplete Search */}
                   <div className="relative">
                     <label htmlFor="patientSearch" className="block text-sm font-medium text-gray-700 mb-2">
@@ -831,30 +837,30 @@ ASSESSMENT:
                         }}
                         onFocus={() => setShowAutocomplete(true)}
                         placeholder="Type to search patients..."
-                        className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 text-sm sm:text-base border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                       />
                       {showAutocomplete && searchQuery && filteredPatients.length > 0 && (
                         <div className="autocomplete-dropdown absolute z-10 w-full mt-1 bg-white border border-blue-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
                           {filteredPatients.map((patient) => (
-                                                          <div
-                                key={patient.folder_name}
-                                className="px-3 py-2 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                                onClick={() => {
-                                  setSearchQuery(patient.name);
-                                  setPatientName(patient.name);
-                                  setSelectedPatient(patient.name);
-                                  setCurrentPatientId(patient.patient_id);
-                                  loadPatientFiles(patient.name);
-                                  setShowAutocomplete(false);
-                                }}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <span className="font-medium text-gray-900">{patient.name}</span>
-                                  <span className="text-sm text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
-                                    {patient.file_count} files
-                                  </span>
-                                </div>
-                              <div className="text-sm text-gray-500">Folder: {patient.folder_name}</div>
+                            <div
+                              key={patient.folder_name}
+                              className="px-3 py-2 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                              onClick={() => {
+                                setSearchQuery(patient.name);
+                                setPatientName(patient.name);
+                                setSelectedPatient(patient.name);
+                                setCurrentPatientId(patient.patient_id);
+                                loadPatientFiles(patient.name);
+                                setShowAutocomplete(false);
+                              }}
+                            >
+                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-1 sm:space-y-0">
+                                <span className="font-medium text-gray-900 text-sm sm:text-base">{patient.name}</span>
+                                <span className="text-xs sm:text-sm text-blue-600 bg-blue-100 px-2 py-1 rounded-full self-start sm:self-auto">
+                                  {patient.file_count} files
+                                </span>
+                              </div>
+                              <div className="text-xs sm:text-sm text-gray-500">Folder: {patient.folder_name}</div>
                             </div>
                           ))}
                         </div>
@@ -908,17 +914,31 @@ ASSESSMENT:
             <div className="bg-blue-50 rounded-lg overflow-hidden">
             {/* Header - Always visible */}
             <div 
-              className="p-6 cursor-pointer hover:bg-blue-100 transition-colors"
+              className="p-4 sm:p-6 cursor-pointer hover:bg-blue-100 transition-colors"
               onClick={() => setIsUploadPanelExpanded(!isUploadPanelExpanded)}
             >
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900">Upload Medical Documents</h2>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Upload Medical Documents</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                  {/* Servis.ai Sync Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleServisAiSync();
+                    }}
+                    className="px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-xs sm:text-sm flex items-center justify-center space-x-1 sm:space-x-2 transition-colors"
+                    title="Sync data from Servis.ai (Coming Soon)"
+                  >
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>Sync Servis.ai</span>
+                  </button>
+                  <span className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
                     {files.length > 0 ? `${files.length} file(s) selected` : 'No files selected'}
                   </span>
                   <svg 
-                    className={`w-5 h-5 text-gray-600 transition-transform ${isUploadPanelExpanded ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 text-gray-600 transition-transform ${isUploadPanelExpanded ? 'rotate-180' : ''} self-center`}
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
@@ -931,9 +951,9 @@ ASSESSMENT:
             
                         {/* Collapsible Content */}
             {isUploadPanelExpanded && (
-              <div className="px-6 pb-6 border-t border-blue-200">
+              <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-blue-200">
                 {/* File Upload Section */}
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
                     <label htmlFor="fileInput" className="block text-sm font-medium text-gray-700 mb-2">
                       Select Medical Documents *
@@ -944,16 +964,16 @@ ASSESSMENT:
                       multiple
                       accept=".pdf,.png,.jpg,.jpeg,.tiff,.bmp"
                       onChange={handleFileChange}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="block w-full text-sm text-gray-500 file:mr-2 sm:file:mr-4 file:py-2 file:px-2 sm:file:px-4 file:rounded-full file:border-0 file:text-xs sm:file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     />
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex flex-wrap items-center gap-3">
+                  <div className="flex flex-col sm:flex-row flex-wrap items-center gap-2 sm:gap-3">
                     <button
                       onClick={handleUpload}
                       disabled={files.length === 0 || isUploading}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                       title={`Files: ${files.length}, Uploading: ${isUploading}`}
                     >
                       {isUploading ? 'Processing...' : 'Upload & Extract'}
@@ -961,21 +981,21 @@ ASSESSMENT:
                     <button
                       onClick={testExtraction}
                       disabled={isUploading}
-                      className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
                     >
                       Test Extraction
                     </button>
                     <button
                       onClick={showSampleData}
                       disabled={isUploading}
-                      className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                      className="w-full sm:w-auto px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                     >
                       Sample
                     </button>
                     <button
                       onClick={clearForm}
                       disabled={isUploading}
-                      className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                      className="w-full sm:w-auto px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                     >
                       Clear Form
                     </button>

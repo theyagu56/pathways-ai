@@ -18,7 +18,6 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) => {
   const [showEvents, setShowEvents] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false); // <-- NEW
   const location = useLocation();
 
@@ -131,10 +130,7 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
     }
   };
 
-  const getHeading = (path: string) => {
-    const item = menuItems.find(item => item.path === path);
-    return item ? item.name : 'Dashboard';
-  };
+
 
   const EventIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -167,8 +163,14 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
       <div className="w-64 bg-white shadow-lg hidden md:block h-full">
         {/* Logo/Brand */}
         <div className="p-4 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-gray-900">Pathways Agent</h1>
-          <p className="text-xs text-gray-600">Healthcare Management</p>
+          <div className="flex flex-col items-center">
+            <img 
+              src="/PathwaysAILogo.png" 
+              alt="Pathways AI Logo" 
+              className="h-32 w-auto max-w-full"
+              style={{ minHeight: '128px', objectFit: 'contain' }}
+            />
+          </div>
         </div>
         {/* Navigation Menu */}
         <nav className="mt-4">
@@ -203,9 +205,13 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
           {/* Drawer */}
           <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-30 md:hidden flex flex-col">
             <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Pathways Agent</h1>
-                <p className="text-xs text-gray-600">Healthcare Management</p>
+              <div className="flex flex-col items-center">
+                <img 
+                  src="/PathwaysAILogo.png" 
+                  alt="Pathways AI Logo" 
+                  className="h-32 w-auto max-w-full"
+                  style={{ minHeight: '128px', objectFit: 'contain' }}
+                />
               </div>
               <button
                 className="ml-2 text-gray-600 hover:text-gray-900 focus:outline-none"
@@ -243,35 +249,8 @@ const Layout: React.FC<LayoutProps> = ({ children, logs, addLog, clearLogs }) =>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar */}
-        <div
-          className="flex items-center justify-between px-4 md:px-8 py-3 bg-white shadow-sm sticky top-0 z-20"
-          style={{ minHeight: '56px', paddingLeft: '3.5rem' }} // 3.5rem = 56px, matches hamburger width+margin
-        >
-          {/* Heading (responsive font size and margin) */}
-          <h1 className="text-lg md:text-2xl font-semibold truncate ml-0 md:ml-0" style={{ maxWidth: '70vw' }}>
-            {getHeading(location.pathname)}
-          </h1>
-          {/* Profile and Events icons (responsive size) */}
-          <div className="flex items-center space-x-2 md:space-x-4">
-            <button
-              className="p-1 md:p-2 rounded-full hover:bg-gray-100 focus:outline-none"
-              onClick={() => setShowEvents(true)}
-              aria-label="Show events"
-            >
-              <EventIcon className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-            <button
-              className="p-1 md:p-2 rounded-full hover:bg-gray-100 focus:outline-none"
-              onClick={() => setShowProfile(true)}
-              aria-label="Show profile"
-            >
-              <ProfileIcon className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-          </div>
-        </div>
         {/* Main page content */}
-        <main className="flex-1 overflow-y-auto px-2 md:px-8 py-4 md:py-8" style={{ paddingLeft: '3.5rem' }}>
+        <main className="flex-1 overflow-y-auto px-2 sm:px-4 md:px-8 py-2 sm:py-4 md:py-8" style={{ paddingLeft: '3.5rem' }}>
           {children}
         </main>
       </div>

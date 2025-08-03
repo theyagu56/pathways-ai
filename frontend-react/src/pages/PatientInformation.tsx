@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MedicalTimeline from '../components/MedicalTimeline';
+import { getApiUrl } from '../config';
 
 interface VisitDetail {
   date?: string;
@@ -106,7 +107,7 @@ const PatientInformation: React.FC = () => {
         // Update progress to show upload in progress
         setUploadProgress(prev => ({ ...prev, [fileName]: 50 }));
         
-        const response = await fetch('http://localhost:8000/upload/', {
+        const response = await fetch(getApiUrl('/upload/'), {
           method: 'POST',
           body: formData
         });
@@ -152,7 +153,7 @@ const PatientInformation: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/download/${resultId}`);
+              const response = await fetch(getApiUrl(`/download/${resultId}`));
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -269,7 +270,7 @@ const PatientInformation: React.FC = () => {
 
   const loadPatients = async () => {
     try {
-      const response = await fetch('http://localhost:8000/patients/');
+      const response = await fetch(getApiUrl('/patients/'));
       if (response.ok) {
         const data = await response.json();
         setPatients(data);
@@ -281,7 +282,7 @@ const PatientInformation: React.FC = () => {
 
   const loadPatientFiles = async (patientName: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/patient-files/${patientName}`);
+      const response = await fetch(getApiUrl(`/patient-files/${patientName}`));
       if (response.ok) {
         const data = await response.json();
         setResults(data);

@@ -220,15 +220,15 @@ const VoiceIntake: React.FC<VoiceIntakeProps> = ({ addLog }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center"></h1>
+    <div className="max-w-4xl mx-auto p-3 sm:p-6">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center">Voice Intake</h1>
       
       {/* Input Mode Selection */}
-      <div className="mb-6">
-        <div className="flex space-x-4 mb-4">
+      <div className="mb-4 sm:mb-6">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
           <button
             onClick={() => setInputMode("voice")}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base ${
               inputMode === "voice" 
                 ? "bg-blue-600 text-white" 
                 : "bg-gray-200 text-gray-700"
@@ -238,7 +238,7 @@ const VoiceIntake: React.FC<VoiceIntakeProps> = ({ addLog }) => {
           </button>
           <button
             onClick={() => setInputMode("file")}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base ${
               inputMode === "file" 
                 ? "bg-blue-600 text-white" 
                 : "bg-gray-200 text-gray-700"
@@ -248,7 +248,7 @@ const VoiceIntake: React.FC<VoiceIntakeProps> = ({ addLog }) => {
           </button>
           <button
             onClick={() => setInputMode("text")}
-            className={`px-4 py-2 rounded-lg ${
+            className={`px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base ${
               inputMode === "text" 
                 ? "bg-blue-600 text-white" 
                 : "bg-gray-200 text-gray-700"
@@ -260,9 +260,9 @@ const VoiceIntake: React.FC<VoiceIntakeProps> = ({ addLog }) => {
       </div>
 
       {/* Instructions */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <h3 className="font-semibold text-blue-800 mb-2">📋 Instructions</h3>
-        <p className="text-blue-700 text-sm">
+      <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <h3 className="font-semibold text-blue-800 mb-2 text-sm sm:text-base">📋 Instructions</h3>
+        <p className="text-blue-700 text-xs sm:text-sm">
           Speak or type your symptoms, include your zip code, and mention your insurance provider. 
           The system will automatically extract all information and find the best healthcare providers for you.
         </p>
