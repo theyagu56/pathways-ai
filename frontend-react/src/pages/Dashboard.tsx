@@ -1,15 +1,71 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Dashboard: React.FC = () => {
+  const [currentUser, setCurrentUser] = useState<string>('');
+
+  useEffect(() => {
+    const user = localStorage.getItem('currentUser');
+    if (user) {
+      setCurrentUser(user);
+    }
+  }, []);
+
   return (
     <div className="space-y-4 sm:space-y-6">
-      <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
-          Welcome to Pathways Agent
-        </h1>
-        <p className="text-base sm:text-lg text-gray-600">
-          Your comprehensive healthcare management platform
-        </p>
+      {/* Professional Welcome Section */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 sm:p-8 border border-blue-100">
+        <div className="flex flex-col sm:flex-row items-center justify-between">
+          <div className="text-center sm:text-left mb-4 sm:mb-0">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+              Welcome to Pathways Agent
+            </h1>
+            <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-200">
+                  <img 
+                    src="/Thiyagu.jpg" 
+                    alt="Thiyagarajan Kamalakannan" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="text-lg sm:text-xl font-semibold text-gray-900">
+                    Thiyagarajan Kamalakannan
+                  </p>
+                  <p className="text-sm text-blue-600 font-medium">
+                    Healthcare Administrator
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 text-green-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium">Online</span>
+              </div>
+            </div>
+          </div>
+          <div className="text-center sm:text-right">
+            <p className="text-sm text-gray-600 mb-1">Last Login</p>
+            <p className="text-sm font-medium text-gray-900">
+              {new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </p>
+            <p className="text-xs text-gray-500">
+              {new Date().toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+              })}
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 pt-4 border-t border-blue-200">
+          <p className="text-base text-gray-700 text-center">
+            Your comprehensive healthcare management platform for efficient patient care and medical document processing
+          </p>
+        </div>
       </div>
 
       {/* Quick Stats */}

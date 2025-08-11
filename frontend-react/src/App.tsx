@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './mobile-styles.css';
 import Layout from './components/Layout';
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ProviderMatching from './pages/provider-matching';
 import VoiceIntake from './pages/VoiceIntake';
@@ -22,8 +23,20 @@ interface LogEntry {
   details?: string;
 }
 
+// Protected Route Component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const currentUser = localStorage.getItem('currentUser');
+  return currentUser ? <>{children}</> : <Navigate to="/login" replace />;
+};
+
 function App() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem('currentUser');
+    setIsAuthenticated(!!user);
+  }, []);
 
   const addLog = (type: LogEntry['type'], message: string, details?: string) => {
     const newLog: LogEntry = {
@@ -43,29 +56,103 @@ function App() {
   return (
     <ErrorBoundary>
       <Router>
-        <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/patient-intake" element={
-              <PatientIntakeForm
-                familyMembers={[]}
-                insuranceProviders={[]}
-                mode="dashboard"
-                onSubmit={(data) => {
-                  console.log('Form submitted:', data);
-                }}
-              />
-            } />
-            <Route path="/referral-management" element={<ProviderMatching addLog={addLog} />} />
-            <Route path="/voice-intake" element={<VoiceIntake addLog={addLog} />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/documents" element={<Documents />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/medical-chronology" element={<MedicalChronology />} />
-            <Route path="/medical-chronology1" element={<MedicalChronology1 />} />
-            <Route path="/patient-information" element={<PatientInformation />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          {/* Public Route */}
+          <Route path="/login" element={
+            isAuthenticated ? <Navigate to="/" replace /> : <Login />
+          } />
+          
+          {/* Protected Routes */}
+          <Route path="/" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <Dashboard />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/patient-intake" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <PatientIntakeForm
+                  familyMembers={[]}
+                  insuranceProviders={[]}
+                  mode="dashboard"
+                  onSubmit={(data) => {
+                    console.log('Form submitted:', data);
+                  }}
+                />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/referral-management" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <ProviderMatching addLog={addLog} />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/voice-intake" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <VoiceIntake addLog={addLog} />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/appointments" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <Appointments />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/documents" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <Documents />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <Settings />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/medical-chronology" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <MedicalChronology />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/medical-chronology1" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <MedicalChronology1 />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/patient-information" element={
+            <ProtectedRoute>
+              <Layout logs={logs} addLog={addLog} clearLogs={clearLogs}>
+                <PatientInformation />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          {/* Redirect to login if no route matches */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
       </Router>
     </ErrorBoundary>
   );
